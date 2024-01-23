@@ -51,14 +51,33 @@ class Figure:
         Function checks step ability
         '''
         self.prob_steps.clear()
+        # Match figure type
         match (self.fig_type):
             case 'b_king' | 'w_king':
+                # Case x != 0 -> not left column
                 if not (self.desk_x - 1 < 0):
                     self.prob_steps.append((self.desk_x - 1, self.desk_y))
+                    # Case x != 0 and y != 0 -> not left top cell
                     if not (self.desk_y - 1 < 0):
                         self.prob_steps.append((self.desk_x - 1, self.desk_y - 1))
+                # Case y != 0 and 0 <= x <= 7 -> not top row
                 if not (self.desk_y - 1 < 0):
                     self.prob_steps.append((self.desk_x, self.desk_y - 1))
+                    # Case y != 0 and x != 7 -> not right top cell
+                    if not (self.desk_x + 1 > 7):
+                        self.prob_steps.append((self.desk_x + 1, self.desk_y - 1))
+                # Case x != 7 -> not right column
+                if not (self.desk_x + 1 > 7):
+                    self.prob_steps.append((self.desk_x + 1, self.desk_y))
+                    # Case x != 7 and y != 7 -> not right bottom cell
+                    if not (self.desk_y + 1 > 7):
+                        self.prob_steps.append((self.desk_x + 1, self.desk_y + 1))
+                # Case y != 7 and 0 <= x <= 7 -> not bottom row
+                if not (self.desk_y + 1 > 7):
+                    self.prob_steps.append((self.desk_x, self.desk_y + 1))
+                    # Case y != 7 and x != 0 -> not left bottom cell
+                    if not (self.desk_x - 1 < 0):
+                        self.prob_steps.append((self.desk_x - 1, self.desk_y + 1))
             case 'b_queen' | 'w_queen':
                 pass 
             case 'b_rook' | 'w_rook':
@@ -76,5 +95,6 @@ class Figure:
         
 
 a = Figure('w_king', 2, 2)
-print(a.fig_view) 
+a.genStepRule()
+print(a.fig_view, a.prob_steps) 
 
